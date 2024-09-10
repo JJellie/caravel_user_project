@@ -12,7 +12,7 @@ module fifo_buffer (
     reg [2:0] write_addr = 0, read_addr = 0;
 
     assign full = (count==8) ? 1'b1 : 1'b0;
-    assign data_o = ce ? FIFO[read_addr] : 0;
+    assign data_o = ce ? FIFO[read_addr] : 32'b0;
 
     always @ (posedge clk) begin
         if (rst) begin

@@ -27,14 +27,14 @@ module wishbone_nn #(
         .clk(wb_clk_i),
         .we(wbs_we_i),
         .rst(wb_rst_i),
-        .ce(wbs_cyc_i),
+        .ce(wbs_stb_i),
         .full(full),
         .data_i(wbs_dat_i),
         .data_o(fifo_out)
     );
     
     assign wbs_ack_o = (wbs_stb_i && wbs_cyc_i && !wb_rst_i && (wbs_adr_i == IO_ADDRESS || wbs_adr_i == PROGRAMMABLE_ADDRESS)) ? 1'b1 : 1'b0;
-    assign wbs_dat_o = (wbs_adr_i == IO_ADDRESS && !wbs_we_i) ? fifo_out : 32'b0;
+    assign wbs_dat_o = (wbs_adr_i == IO_ADDRESS && !wbs_we_i && !wb_rst_i) ? fifo_out : 32'b0;
 
 endmodule
 

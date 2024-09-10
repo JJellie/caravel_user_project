@@ -21,8 +21,7 @@
     // Assume default net type to be wire because GL netlists don't have the wire definitions
     `default_nettype wire
     `include "gl/user_project_wrapper.v"
-    `include "gl/user_proj_example.v"
-    `include "gl/input_fifo.v"
+    `include "gl/wishbone_nn.v"
 `else
     `include "user_project_wrapper.v"
     `include "wishbone_nn/input_fifo.v"

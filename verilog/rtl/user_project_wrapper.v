@@ -81,6 +81,11 @@ module user_project_wrapper #(
 /* User project is instantiated  here   */
 /*--------------------------------------*/
     wishbone_nn nn0 (
+    `ifdef USE_POWER_PINS
+        .vccd1(vccd1),	// User area 1 1.8V supply
+        .vssd1(vssd1),	// User area 1 digital ground
+    `endif
+
         .wb_clk_i(wb_clk_i),
         .wb_rst_i(wb_rst_i),
         .wbs_stb_i(wbs_stb_i),
