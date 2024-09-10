@@ -1,5 +1,9 @@
+//`include "input_fifo.v"
+// `include "wishbone_nn/input_fifo.v"
+
 module wishbone_nn #(
-    //parameter [31:0] ADDRESS = 32'h30000000
+    parameter [31:0] IO_ADDRESS = 32'h30000000,
+    parameter [31:0] PROGRAMMABLE_ADDRESS = IO_ADDRESS + 1
     )(
     `ifdef USE_POWER_PINS
         inout vccd1,	// User area 1 1.8V supply
@@ -11,16 +15,14 @@ module wishbone_nn #(
     input wire wbs_stb_i,
     input wire wbs_cyc_i,
     input wire wbs_we_i,
-    //input wire [3:0] wbs_sel_i,
+    input wire [3:0] wbs_sel_i,
     input wire [31:0] wbs_dat_i,
-    //input wire [31:0] wbs_adr_i,
-    output reg wbs_ack_o,
+    input wire [31:0] wbs_adr_i,
+    output wire wbs_ack_o,
     output wire [31:0] wbs_dat_o
 );
     wire full;
-    always @ (posedge wb_clk_i) begin 
-        wbs_ack_o <= wbs_cyc_i & wbs_stb_i;
-    end
+    wire [31:0] fifo_out;
     fifo_buffer fifo_in (
         .clk(wb_clk_i),
         .we(wbs_we_i),
@@ -28,8 +30,11 @@ module wishbone_nn #(
         .ce(wbs_cyc_i),
         .full(full),
         .data_i(wbs_dat_i),
-        .data_o(wbs_dat_o)
+        .data_o(fifo_out)
     );
+    
+    assign wbs_ack_o = (wbs_stb_i && wbs_cyc_i && !wb_rst_i && (wbs_adr_i == IO_ADDRESS || wbs_adr_i == PROGRAMMABLE_ADDRESS)) ? 1'b1 : 1'b0;
+    assign wbs_dat_o = (wbs_adr_i == IO_ADDRESS && !wbs_we_i) ? fifo_out : 32'b0;
 
 endmodule
 
