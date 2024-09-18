@@ -6,6 +6,10 @@ module fifo_buffer (
     output wire full,
     input wire [31:0] data_i,
     output wire [31:0] data_o
+    `ifdef USE_POWER_PINS
+        inout vccd1,	// User area 1 1.8V supply
+        inout vssd1,	// User area 1 digital ground
+    `endif
 );
     reg [31:0] FIFO [0:7];
     reg [2:0] count;
@@ -14,7 +18,7 @@ module fifo_buffer (
     assign full = (count==8) ? 1'b1 : 1'b0;
     assign data_o = ce ? FIFO[read_addr] : 32'b0;
 
-    always @ (posedge clk) begin
+    always @(posedge clk) begin
         if (rst) begin
             write_addr <= 0;
             read_addr <= 0;
@@ -29,9 +33,17 @@ module fifo_buffer (
                 read_addr <= read_addr+1;
             end
         end
-        if (write_addr == 8) write_addr <= 0;
-        if (read_addr == 8) read_addr <= 0;
-        if (read_addr > write_addr) count <= read_addr - write_addr;
-        if (write_addr > read_addr) count <= write_addr - read_addr;
+        if (write_addr == 8) begin
+            write_addr <= 0;
+        end 
+        if (read_addr == 8) begin
+            read_addr <= 0;
+        end 
+        if (read_addr > write_addr) begin
+            count <= read_addr - write_addr;
+        end 
+        if (write_addr > read_addr) begin
+            count <= write_addr - read_addr;
+        end
     end
 endmodule

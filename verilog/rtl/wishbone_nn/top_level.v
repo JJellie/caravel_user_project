@@ -1,4 +1,4 @@
-//`include "input_fifo.v"
+// `include "input_fifo.v"
 // `include "wishbone_nn/input_fifo.v"
 
 module wishbone_nn #(
@@ -24,6 +24,10 @@ module wishbone_nn #(
     wire full;
     wire [31:0] fifo_out;
     fifo_buffer fifo_in (
+        `ifdef USE_POWER_PINS
+            .vccd1(vccd1),	// User area 1 1.8V supply
+            .vssd1(vssd1),	// User area 1 digital ground
+        `endif
         .clk(wb_clk_i),
         .we(wbs_we_i),
         .rst(wb_rst_i),

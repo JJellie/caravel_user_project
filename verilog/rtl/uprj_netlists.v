@@ -24,6 +24,6 @@
     `include "gl/wishbone_nn.v"
 `else
     `include "user_project_wrapper.v"
-    `include "wishbone_nn/input_fifo.v"
     `include "wishbone_nn/top_level.v"
+    `include "wishbone_nn/input_fifo.v"
 `endif
