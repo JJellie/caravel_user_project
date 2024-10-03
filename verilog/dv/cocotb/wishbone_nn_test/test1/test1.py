@@ -14,5 +14,5 @@ async def test1(dut):
     # await caravelEnv.release_csb()
     await caravelEnv.wait_mgmt_gpio(1)
     cocotb.log.info(f"[TEST] finish configuration") 
-    msg = await uart.get_line()
+    msg = await uart.get_int()
     cocotb.log.info(f"[TEST] read {msg}")

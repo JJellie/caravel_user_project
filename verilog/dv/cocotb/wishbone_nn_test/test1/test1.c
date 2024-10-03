@@ -16,6 +16,7 @@
 #include <firmware_apis.h> // include required APIs
 
 void main(){
+    volatile uint32_t* wishbone_reg = (uint32_t*)0x30000000;
     ManagmentGpio_outputEnable();
     ManagmentGpio_write(0);
     enableHkSpi(0); // disable housekeeping spi
@@ -31,9 +32,9 @@ void main(){
     // writing to any address inside user project address space would reload the counter value
     
     // In theory: Write to fifo, then read result
-    USER_writeWord(0x7,0);
+    USER_writeWord(0xDEAD,0);
+    // *wishbone_reg = 0xABBA;
     uint32_t data = USER_readWord(0);
-    data = 123;
     UART_sendInt(data);
     
 

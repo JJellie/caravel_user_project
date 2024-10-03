@@ -22,6 +22,8 @@ module wishbone_nn #(
 );
     wire full;
     wire [31:0] fifo_out;
+    wire read_e;
+    assign read_e = wbs_adr_i == IO_ADDRESS;
     fifo_buffer fifo_in (
         `ifdef USE_POWER_PINS
             .vccd1(vccd1),	// User area 1 1.8V supply
@@ -30,7 +32,7 @@ module wishbone_nn #(
         .clk(wb_clk_i),
         .we(wbs_we_i),
         .rst(wb_rst_i),
-        .ce(wbs_stb_i),
+        .ce(wbs_stb_i && read_e), 
         .full(full),
         .data_i(wbs_dat_i),
         .data_o(fifo_out)
