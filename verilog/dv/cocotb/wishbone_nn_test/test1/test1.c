@@ -14,24 +14,28 @@
 
 
 #include <firmware_apis.h> // include required APIs
+
 void main(){
     ManagmentGpio_outputEnable();
     ManagmentGpio_write(0);
     enableHkSpi(0); // disable housekeeping spi
     // configure all gpios as  user out then chenge gpios from 32 to 37 before loading this configurations
-    GPIOs_configureAll(GPIO_MODE_USER_STD_OUT_MONITORED);
-    
+    GPIOs_configure(6,GPIO_MODE_MGMT_STD_OUTPUT);
     GPIOs_loadConfigs(); // load the configuration 
+    
+    // Enable UART
+    UART_enableTX(1);
+    
     User_enableIF(); // this necessary when reading or writing between wishbone and user project if interface isn't enabled no ack would be recieve and the command will be stuck
-    // user la reset and wb clk
-    LogicAnalyzer_outputEnable(2,1);
-    // reset counter 
-    LogicAnalyzer_write(2,2);
-    LogicAnalyzer_write(2,0);
     ManagmentGpio_write(1); // configuration finished 
     // writing to any address inside user project address space would reload the counter value
-    USER_writeWord(0x7,0x88);
-    ManagmentGpio_write(0); // start counting from 0
-     //////////////////////add test here//////////////////////
+    
+    // In theory: Write to fifo, then read result
+    USER_writeWord(0x7,0);
+    uint32_t data = USER_readWord(0);
+    data = 123;
+    UART_sendInt(data);
+    
+
     return;
 }

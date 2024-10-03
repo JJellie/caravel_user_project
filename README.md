@@ -7,4 +7,4 @@
 
 ## Please fill in your project documentation in this README.md file 
 
-Refer to [README](docs/source/index.md) for this sample project documentation.
+Project for internship
