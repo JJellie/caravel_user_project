@@ -7,19 +7,31 @@
     "ROUTING_CORES": 1,
     "CLOCK_PERIOD": 25,
     "CLOCK_PORT": "wb_clk_i",
-    "FP_PDN_MACRO_HOOKS": "nn0 vccd1 vssd1 vccd1 vssd1",
+    "FP_PDN_MACRO_HOOKS": [
+        "nn0 vccd1 vssd1 vccd1 vssd1",
+        "nsa0 vccd1 vssd1 vccd1 vssd1",
+        "nsa0 vdda1 vssa1 vdda1 vssa1"
+
+    ],
     "MACRO_PLACEMENT_CFG": "dir::macro.cfg",
     "MAGIC_DEF_LABELS": 0,
     "VERILOG_FILES_BLACKBOX": [
-        "dir::../../verilog/gl/wishbone_nn.v"
+        "dir::../../verilog/gl/wishbone_nn.v",
+        "dir::../../verilog/gl/neuron_synapse_array_with_input_output_logic_v1.v"
     ],
-    "EXTRA_LEFS": "dir::../../lef/wishbone_nn.lef",
-    "EXTRA_GDS_FILES": "dir::../../gds/wishbone_nn.gds",
+    "EXTRA_LEFS": [
+        "dir::../../lef/wishbone_nn.lef",
+        "dir::../../lef/neuron_synapse_array_with_input_output_logic_v1.lef"
+    ],
+    "EXTRA_GDS_FILES": [
+        "dir::../../gds/wishbone_nn.gds",
+        "dir::../../gds/neuron_synapse_array_with_input_output_logic_v1.gds"
+    ],
     "EXTRA_LIBS": "dir::../../lib/wishbone_nn.lib",
     "EXTRA_SPEFS": [
-        "wishbone_nn", 
-        "dir::../../spef/multicorner/wishbone_nn.min.spef", 
-        "dir::../../spef/multicorner/wishbone_nn.nom.spef", 
+        "wishbone_nn",
+        "dir::../../spef/multicorner/wishbone_nn.min.spef",
+        "dir::../../spef/multicorner/wishbone_nn.nom.spef",
         "dir::../../spef/multicorner/wishbone_nn.max.spef"
     ],
     "BASE_SDC_FILE": "dir::base_user_project_wrapper.sdc",

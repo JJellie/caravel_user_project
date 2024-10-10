@@ -80,6 +80,9 @@ module user_project_wrapper #(
 /*--------------------------------------*/
 /* User project is instantiated  here   */
 /*--------------------------------------*/
+    wire req_cpu;
+    wire [`NN_ID_BUS-1:0] nn_ids;
+
     wishbone_nn nn0 (
         `ifdef USE_POWER_PINS
             .vccd1(vccd1),	// User area 1 1.8V supply
@@ -94,7 +97,17 @@ module user_project_wrapper #(
         .wbs_dat_i(wbs_dat_i),
         .wbs_adr_i(wbs_adr_i),
         .wbs_ack_o(wbs_ack_o),
-        .wbs_dat_o(wbs_dat_o)
+        .wbs_dat_o(wbs_dat_o),
+        .nn_ids(nn_ids)
+    );
+
+    neuron_synapse_array_with_input_output_logic_v1 nsa0 (
+        .dGND(vssd1),
+        .dVDD(vccd1),
+        .aGND(vssa1),
+        .aVDD(vdda1),
+        .CLK(wb_clk_i),
+        .syn_addr(nn_ids)
     );
 
 endmodule	// user_project_wrapper

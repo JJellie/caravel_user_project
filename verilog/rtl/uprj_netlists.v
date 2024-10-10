@@ -22,8 +22,9 @@
     `default_nettype wire
     `include "gl/user_project_wrapper.v"
     `include "gl/wishbone_nn.sv"
+    `include "gl/neuron_synapse_array_with_input_output_logic_v1.v"
 `else
     `include "user_project_wrapper.v"
     `include "wishbone_nn/top_level.sv"
-    `include "wishbone_nn/input_fifo.sv"
+    `include "wishbone_nn/fifo.sv"
 `endif

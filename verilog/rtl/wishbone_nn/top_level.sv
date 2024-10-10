@@ -18,10 +18,12 @@ module wishbone_nn #(
     input wire [31:0] wbs_dat_i,
     input wire [31:0] wbs_adr_i,
     output wire wbs_ack_o,
-    output wire [31:0] wbs_dat_o
+    output wire [31:0] wbs_dat_o,
+    input wire [`NN_ID_BUS-1:0] nn_ids
 );
     wire full;
-    wire [31:0] fifo_out;
+    wire full2;
+    wire [`NN_ID_BUS-1:0] fifo_output;
     wire read_e;
     assign read_e = wbs_adr_i == IO_ADDRESS;
     fifo_buffer fifo_in (
@@ -34,12 +36,25 @@ module wishbone_nn #(
         .rst(wb_rst_i),
         .ce(wbs_stb_i && read_e), 
         .full(full),
-        .data_i(wbs_dat_i),
-        .data_o(fifo_out)
+        .data_i(wbs_dat_i)
+    );
+
+    fifo_buffer #(.FIFO_TYPE(`NN_ID_BUS)) fifo_out (
+        `ifdef USE_POWER_PINS
+            .vccd1(vccd1),	// User area 1 1.8V supply
+            .vssd1(vssd1),	// User area 1 digital ground
+        `endif
+        .clk(wb_clk_i),
+        .we(wbs_we_i),
+        .rst(wb_rst_i),
+        .ce(wbs_stb_i && read_e), 
+        .full(full2),
+        .data_i(nn_ids),
+        .data_o(fifo_output)
     );
     
-    assign wbs_ack_o = (wbs_stb_i && wbs_cyc_i && !wb_rst_i && (wbs_adr_i == IO_ADDRESS || wbs_adr_i == PROGRAMMABLE_ADDRESS)) ? 1'b1 : 1'b0;
-    assign wbs_dat_o = (wbs_adr_i == IO_ADDRESS && !wbs_we_i && !wb_rst_i) ? fifo_out : 32'b0;
+    assign wbs_ack_o = (wbs_stb_i && wbs_cyc_i && !wb_rst_i && (wbs_adr_i == IO_ADDRESS || wbs_adr_i == PROGRAMMABLE_ADDRESS)) ? 1'b1 : 1'bz;
+    assign wbs_dat_o = (wbs_adr_i == IO_ADDRESS && !wbs_we_i && !wb_rst_i) ? {32-`NN_ID_BUS'b0 ,fifo_output} : 32'bz;
     
     `ifdef FORMAL
         always @(posedge wb_clk_i) begin

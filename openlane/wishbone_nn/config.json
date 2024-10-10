@@ -4,7 +4,7 @@
     "VERILOG_FILES": [
         "dir::../../verilog/rtl/defines.v",
         "dir::../../verilog/rtl/wishbone_nn/top_level.sv",
-        "dir::../../verilog/rtl/wishbone_nn/input_fifo.sv"
+        "dir::../../verilog/rtl/wishbone_nn/fifo.sv"
     ],
     "CLOCK_PERIOD": 25,
     "CLOCK_PORT": "wb_clk_i",

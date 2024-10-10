@@ -63,4 +63,7 @@
 `define OENB_INIT 1'b0
 `define DM_INIT 3'b001
 
+// Define size of neural network id bus
+`define NN_ID_BUS 4
+
 `endif // __GLOBAL_DEFINE_H

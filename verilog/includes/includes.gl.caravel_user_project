@@ -18,6 +18,7 @@
 
 -v $(USER_PROJECT_VERILOG)/gl/caravel_core.v
 -v $(USER_PROJECT_VERILOG)/gl/wishbone_nn.v
+-v $(USER_PROJECT_VERILOG)/gl/neuron_synapse_array_with_input_output_logic_v1.v
 
 # default should be added according to the defaults used
 
